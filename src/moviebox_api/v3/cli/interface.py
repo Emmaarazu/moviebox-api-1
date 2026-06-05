@@ -53,6 +53,15 @@ qualities_resolution_map = CustomResolutionType.qualities_resolution_map()
 suject_types_name_value_map = SubjectType.map(ignore_names={"ALL", "TV_SERIES"})
 
 
+def normalize_custom_resolution_type(quality: str) -> CustomResolutionType:
+    normalized_quality = quality.strip()
+    if normalized_quality.lower() in {"best", "worst"}:
+        normalized_quality = normalized_quality.lower()
+    else:
+        normalized_quality = normalized_quality.upper()
+    return CustomResolutionType(normalized_quality)
+
+
 @click.group()
 @click.version_option(version=__version__)
 def moviebox_v3():
@@ -305,7 +314,7 @@ def download_movie_command(
                 yes=yes,
                 dir=dir,
                 caption_dir=caption_dir,
-                quality=CustomResolutionType(quality.lower()),
+                quality=normalize_custom_resolution_type(quality),
                 language=language,
                 download_caption=caption,
                 caption_only=caption_only,
@@ -613,7 +622,7 @@ def download_tv_series_command(
                 yes=yes,
                 dir=dir,
                 caption_dir=caption_dir,
-                quality=CustomResolutionType(quality.lower()),
+                quality=normalize_custom_resolution_type(quality),
                 language=language,
                 download_caption=caption,
                 caption_only=caption_only,
